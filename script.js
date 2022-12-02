@@ -1,41 +1,60 @@
 const btn = document.querySelector(".spin");
 const wheel = document.querySelector(".box");
-const span1 = document.querySelector(".span1 b");
-const span2 = document.querySelector(".span2 b");
-const span3 = document.querySelector(".span3 b");
-const span4 = document.querySelector(".span4 b");
-const span5 = document.querySelector(".span5 b");
-const span6 = document.querySelector(".span6 b");
-const span7 = document.querySelector(".span7 b");
-const span8 = document.querySelector(".span8 b");
-const inpA = document.querySelector("#a");
-const inpB = document.querySelector("#b");
-const inpC = document.querySelector("#c");
-const inpD = document.querySelector("#d");
+const inputs = document.querySelectorAll("input");
+const spans = document.querySelectorAll("div.span div");
+const arrow = document.querySelector(".mainbox");
+
+let panels = [
+    "pink",
+    "green",
+    "blue",
+    "pink",
+    "yellow",
+    "blue",
+    "green"
+];
+
+let rotation = 0;
+let lastRotation = 0;
+let panel = 0;
+let newPanel = null;
+
+let fullRotations = 0;
+let innerRotation = 45;
 
 btn.addEventListener("click", () => {
-    var x = 5000;
-    var y = 9999;
-    var deg = Math.floor(Math.random() * 10000);
+    lastRotation = rotation;
+    let deg = Math.floor(Math.random() * 1800);
+    // let deg = 200;
     wheel.style.transform = `rotate(${deg}deg)`;
+    rotation = deg;
+    let difference = rotation - lastRotation;
+
+    // console.log(lastRotation, rotation);
+    // console.log(`roznica: ${difference}`);
+    // console.log(`end: ${difference % 45}`);
+    // console.log(`panels: ${Math.floor(difference / 45)}`);
+
+    panel = panel + Math.floor(Math.abs(difference / 45));
+    console.log("panel index: " + panel);
+    if (panel > 8) { panel = panel % 8; }
+    console.log("panel index sub: " + panel);
+
+    console.log(panels[panel - 1]);
+
+    // fullRotations = Math.floor(deg / 360);
+    // innerRotation = rotation - ((rotation % 45) * fullRotations)
+    // console.log(rotation, innerRotation, fullRotations)
+
+    if (arrow.classList.contains("animate")) arrow.classList.remove("animate");
+    setTimeout(() => {
+        arrow.classList.add("animate");
+    }, 5000)
 });
 
-inpA.addEventListener("input", () => {
-    span1.innerHTML = inpA.value;
-    span5.innerHTML = inpA.value;
-});
-
-inpB.addEventListener("input", () => {
-    span2.innerHTML = inpB.value;
-    span6.innerHTML = inpB.value;
-});
-
-inpC.addEventListener("input", () => {
-    span3.innerHTML = inpC.value;
-    span7.innerHTML = inpC.value;
-});
-
-inpD.addEventListener("input", () => {
-    span4.innerHTML = inpD.value;
-    span8.innerHTML = inpD.value;
-});
+for (let i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener("input", () => {
+        spans[i].innerHTML = inputs[i].value;
+        spans[i + 4].innerHTML = inputs[i].value;
+    });
+}
